@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
 [![Gemini](https://img.shields.io/badge/Gemini-1.5-8E75B2?style=flat&logo=googlegemini)](https://ai.google.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/)
 [![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express)](https://expressjs.com/)
@@ -120,14 +120,14 @@ Ask complex questions about your evidence: "Show every place where Person A appe
 ┌────────────────────────────────┼───────────────────────────────────────────┐
 │                      STORAGE LAYER                                         │
 │  ┌─────────────────────────┐  ┌─────────────────────────────────────────┐  │
-│  │  Firebase Firestore      │  │  Firebase Storage + In-Memory Cache     │  │
+│  │  In-Memory Data Store   │  │  Local File System (uploads/)           │  │
 │  │  • Investigations        │  │  • Evidence files (images, audio, PDFs) │  │
 │  │  • Entities & Timelines  │  │  • Hot data cache for fast retrieval   │  │
 │  │  • Analysis Results      │  │  • Upload validation & processing      │  │
 │  └─────────────────────────┘  └─────────────────────────────────────────┘  │
 │                                                                             │
 │  ┌────────────────────────────────────────────────────────────────────┐   │
-│  │  Firebase Auth (Google Login)                                      │   │
+│  │  Firebase Firestore / Storage / Auth  (planned for production)      │   │
 │  └────────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -153,7 +153,7 @@ Ask complex questions about your evidence: "Show every place where Person A appe
 | **Next.js 15** | React framework with SSR, file-based routing, API rewrites |
 | **React 18** | UI component library |
 | **TypeScript** | End-to-end type safety |
-| **Tailwind CSS 4** | Utility-first styling with custom design system |
+| **Tailwind CSS 3** | Utility-first styling with custom design system |
 | **shadcn/ui** | Enterprise-quality component library (cards, dialogs, tables) |
 | **Framer Motion** | Smooth animations — timeline transitions, card expansions, loading states |
 | **React Flow** | Interactive evidence relationship graph visualization |
@@ -175,9 +175,10 @@ Ask complex questions about your evidence: "Show every place where Person A appe
 ### Infrastructure
 | Technology | Purpose |
 |-----------|---------|
-| **Firebase Firestore** | NoSQL database for investigations, entities, timelines |
-| **Firebase Storage** | Evidence file hosting and retrieval |
-| **Firebase Auth** | Authentication with Google Login |
+| **In-Memory Cache** | Fast evidence and investigation data store |
+| **Firebase Firestore** *(planned)* | NoSQL database for investigations, entities, timelines |
+| **Firebase Storage** *(planned)* | Evidence file hosting and retrieval |
+| **Firebase Auth** *(planned)* | Authentication with Google Login |
 
 ---
 
