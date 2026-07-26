@@ -1,0 +1,45 @@
+# ── Dependencies ──
+node_modules/
+
+# ── Build outputs ──
+.next/
+dist/
+build/
+
+# ── Environment variables ──
+.env
+.env.local
+.env.production
+.env.development
+
+# ── Uploaded evidence files ──
+uploads/*
+!uploads/.gitkeep
+
+# ── IDE & Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.s bak
+*~
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+elevation_log.txt
+
+# ── Logs ──
+*.log
+npm-debug.log*
+
+# ── TypeScript ──
+*.tsbuildinfo
+
+# ── Generated / Temp ──
+.tmp/
+tmp/
+
+# ── Presentations (generated files) ──
+*.pptx

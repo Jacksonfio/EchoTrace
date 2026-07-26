@@ -1,0 +1,345 @@
+import { Router, type Request, type Response } from 'express';
+import { store } from '../services/store';
+import type { ExtractedData } from '../../../shared/types';
+
+export const seedRouter = Router();
+
+// Seed a complete demo investigation
+seedRouter.post('/', (_req: Request, res: Response) => {
+  // Create investigation
+  const investigation = store.createInvestigation(
+    '🚗 Car Accident — Claim #4421',
+    'Insurance claim investigation for a multi-vehicle collision at Oak & 5th intersection. Evidence includes witness statements, photos, voice notes, and police report.',
+  );
+
+  // Add evidence items
+  const evidenceItems = [
+    {
+      id: 'ev-scene-photo',
+      investigationId: investigation.id,
+      type: 'image' as const,
+      name: 'Crash Scene Photo — Overview',
+      description: 'Wide angle shot showing both vehicles at the intersection. Dark gray SUV (plate ABC-1234) with front-end damage. White sedan with driver-side door damage.',
+      fileUrl: '/uploads/demo-scene.jpg',
+      filePath: '',
+      mimeType: 'image/jpeg',
+      sizeBytes: 2458000,
+      uploadedAt: new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: 'ev-witness-txt',
+      investigationId: investigation.id,
+      type: 'text' as const,
+      name: 'Witness Statement — James Miller',
+      description: 'Handwritten witness statement. Says SUV ran red light at 8:42 AM. Describes driver as male, 30s, blue jacket. Notes license plate ABC-1234.',
+      fileUrl: '',
+      filePath: '',
+      mimeType: 'text/plain',
+      sizeBytes: 1240,
+      uploadedAt: new Date(Date.now() - 3000000).toISOString(),
+    },
+    {
+      id: 'ev-voice-note',
+      investigationId: investigation.id,
+      type: 'audio' as const,
+      name: 'Voice Note — Driver (Sarah Chen)',
+      description: '2-minute voice recording from the sedan driver. States she was stopped at a red light when SUV hit her. Claims neck pain. Says SUV was speeding.',
+      fileUrl: '/uploads/demo-voice.mp3',
+      filePath: '',
+      mimeType: 'audio/mpeg',
+      sizeBytes: 2800000,
+      uploadedAt: new Date(Date.now() - 2400000).toISOString(),
+    },
+    {
+      id: 'ev-fir-report',
+      investigationId: investigation.id,
+      type: 'pdf' as const,
+      name: 'FIR Report — Police Station 4th Precinct',
+      description: 'Official First Information Report. Filed at 9:15 AM. Case #4421/2026. Notes vehicle damage, witness statements, hospital referral for sedan driver.',
+      fileUrl: '/uploads/demo-fir.pdf',
+      filePath: '',
+      mimeType: 'application/pdf',
+      sizeBytes: 560000,
+      uploadedAt: new Date(Date.now() - 1800000).toISOString(),
+    },
+    {
+      id: 'ev-whatsapp-ss',
+      investigationId: investigation.id,
+      type: 'screenshot' as const,
+      name: 'WhatsApp Screenshot — Witness 2 (Maria)',
+      description: 'Screenshot of WhatsApp conversation. Maria claims she saw a blue SUV, not dark gray. Says driver was female with long hair. Timestamp 8:46 AM.',
+      fileUrl: '/uploads/demo-whatsapp.png',
+      filePath: '',
+      mimeType: 'image/png',
+      sizeBytes: 890000,
+      uploadedAt: new Date(Date.now() - 1200000).toISOString(),
+    },
+    {
+      id: 'ev-cctv-frame',
+      investigationId: investigation.id,
+      type: 'image' as const,
+      name: 'CCTV Frame — Intersection Camera',
+      description: 'Frame from traffic camera at Oak & 5th. Timestamp 8:42:17 AM. Shows dark gray SUV entering intersection while traffic light is red for its direction.',
+      fileUrl: '/uploads/demo-cctv.jpg',
+      filePath: '',
+      mimeType: 'image/jpeg',
+      sizeBytes: 3100000,
+      uploadedAt: new Date(Date.now() - 600000).toISOString(),
+    },
+  ];
+
+  for (const ev of evidenceItems) {
+    store.addEvidence(investigation.id, ev);
+  }
+
+  // Set extracted data (simulated Gemini analysis)
+  const extractedData: ExtractedData = {
+    entities: [
+      {
+        id: 'entity-0',
+        type: 'Person',
+        name: 'James Miller',
+        description: 'Witness at the scene. Male, approximately 45 years old. Was standing at the corner of Oak & 5th.',
+        mentions: ['ev-witness-txt', 'ev-scene-photo'],
+        confidence: 0.95,
+        metadata: { role: 'witness' },
+      },
+      {
+        id: 'entity-1',
+        type: 'Person',
+        name: 'Sarah Chen',
+        description: 'Driver of the white sedan. Female, 52 years old. Reported neck pain post-accident.',
+        mentions: ['ev-voice-note', 'ev-fir-report'],
+        confidence: 0.98,
+        metadata: { role: 'victim' },
+      },
+      {
+        id: 'entity-2',
+        type: 'Person',
+        name: 'Unknown Male Driver',
+        description: 'Driver of the dark gray SUV. Described as male, 30-35 years old, wearing a blue jacket. Identity not yet confirmed.',
+        mentions: ['ev-witness-txt', 'ev-scene-photo', 'ev-cctv-frame'],
+        confidence: 0.72,
+        metadata: { role: 'suspect' },
+      },
+      {
+        id: 'entity-3',
+        type: 'Person',
+        name: 'Maria',
+        description: 'Second witness who messaged via WhatsApp. Claims different details about the vehicle color and driver.',
+        mentions: ['ev-whatsapp-ss'],
+        confidence: 0.65,
+        metadata: { role: 'witness' },
+      },
+      {
+        id: 'entity-4',
+        type: 'Vehicle',
+        name: 'Dark Gray SUV (ABC-1234)',
+        description: 'SUV involved in the accident. Dark gray color. License plate ABC-1234. Front-end damage visible in photos.',
+        mentions: ['ev-scene-photo', 'ev-witness-txt', 'ev-cctv-frame', 'ev-fir-report'],
+        confidence: 0.97,
+        metadata: { plate: 'ABC-1234', color: 'dark gray' },
+      },
+      {
+        id: 'entity-5',
+        type: 'Vehicle',
+        name: 'White Sedan',
+        description: 'Victim vehicle. White colored sedan, driver-side door damage from collision.',
+        mentions: ['ev-scene-photo', 'ev-voice-note', 'ev-fir-report'],
+        confidence: 0.95,
+        metadata: { color: 'white' },
+      },
+      {
+        id: 'entity-6',
+        type: 'Location',
+        name: 'Oak & 5th Intersection',
+        description: 'Intersection of Oak Street and 5th Avenue. Signal-controlled intersection where the collision occurred.',
+        mentions: ['ev-witness-txt', 'ev-voice-note', 'ev-cctv-frame', 'ev-fir-report'],
+        confidence: 0.99,
+        metadata: { coordinates: '40.7128° N, 74.0060° W' },
+      },
+      {
+        id: 'entity-7',
+        type: 'Organization',
+        name: '4th Precinct Police Station',
+        description: 'Police station that filed the FIR report. Case #4421/2026.',
+        mentions: ['ev-fir-report'],
+        confidence: 0.98,
+        metadata: {},
+      },
+    ],
+    events: [
+      {
+        id: 'event-0',
+        time: '08:42',
+        date: '2026-07-26',
+        description: 'Witness James Miller sees a dark gray SUV run a red light at Oak & 5th intersection. The SUV collides with a white sedan traveling through the intersection.',
+        evidenceIds: ['ev-witness-txt', 'ev-cctv-frame'],
+        entityIds: ['entity-0', 'entity-4', 'entity-5', 'entity-6'],
+        confidence: 0.94,
+        eventType: 'observation',
+      },
+      {
+        id: 'event-1',
+        time: '08:42',
+        date: '2026-07-26',
+        description: 'CCTV camera captures the SUV entering the intersection while the traffic light shows red for its direction. Vehicle speed appears elevated.',
+        evidenceIds: ['ev-cctv-frame'],
+        entityIds: ['entity-4', 'entity-6'],
+        confidence: 0.97,
+        eventType: 'observation',
+      },
+      {
+        id: 'event-2',
+        time: '08:43',
+        date: '2026-07-26',
+        description: 'Sarah Chen records a 2-minute voice note describing the accident. She states she was stopped at a red light and was hit by a speeding SUV.',
+        evidenceIds: ['ev-voice-note'],
+        entityIds: ['entity-1', 'entity-4', 'entity-5', 'entity-6'],
+        confidence: 0.96,
+        eventType: 'statement',
+      },
+      {
+        id: 'event-3',
+        time: '08:44',
+        date: '2026-07-26',
+        description: 'James Miller calls 911 to report the accident. Provides license plate ABC-1234.',
+        evidenceIds: ['ev-witness-txt'],
+        entityIds: ['entity-0', 'entity-4'],
+        confidence: 0.93,
+        eventType: 'statement',
+      },
+      {
+        id: 'event-4',
+        time: '08:46',
+        date: '2026-07-26',
+        description: 'WhatsApp message from Maria claims she saw a blue SUV (not dark gray) and that the driver appeared to be a woman with long hair.',
+        evidenceIds: ['ev-whatsapp-ss'],
+        entityIds: ['entity-3', 'entity-4'],
+        confidence: 0.62,
+        eventType: 'statement',
+      },
+      {
+        id: 'event-5',
+        time: '08:47',
+        date: '2026-07-26',
+        description: 'Police arrive at the scene. First responders assess both drivers. Sarah Chen reports neck pain.',
+        evidenceIds: ['ev-witness-txt', 'ev-fir-report'],
+        entityIds: ['entity-1', 'entity-2', 'entity-4', 'entity-5', 'entity-6'],
+        confidence: 0.95,
+        eventType: 'observation',
+      },
+      {
+        id: 'event-6',
+        time: '08:47',
+        date: '2026-07-26',
+        description: 'CCTV footage confirms SUV ran red light. Contradicts Maria\'s statement about vehicle color — footage shows dark gray, not blue.',
+        evidenceIds: ['ev-cctv-frame', 'ev-whatsapp-ss'],
+        entityIds: ['entity-3', 'entity-4'],
+        confidence: 0.97,
+        eventType: 'contradiction',
+      },
+      {
+        id: 'event-7',
+        time: '09:15',
+        date: '2026-07-26',
+        description: 'FIR report filed at 4th Precinct Police Station. Case #4421/2026. Documents vehicle damage, witness accounts, and hospital referral for Sarah Chen.',
+        evidenceIds: ['ev-fir-report'],
+        entityIds: ['entity-7', 'entity-1', 'entity-4', 'entity-5'],
+        confidence: 0.99,
+        eventType: 'observation',
+      },
+      {
+        id: 'event-8',
+        time: '09:30',
+        date: '2026-07-26',
+        description: 'Inferred: SUV driver likely fled the scene before police arrival based on timeline gaps and no male driver found at location.',
+        evidenceIds: ['ev-witness-txt', 'ev-fir-report'],
+        entityIds: ['entity-2'],
+        confidence: 0.58,
+        eventType: 'inference',
+      },
+    ],
+    contradictions: [
+      {
+        id: 'contradiction-0',
+        description: 'Witness Maria claims the SUV was BLUE. CCTV footage and witness James Miller both confirm the vehicle is DARK GRAY. Vehicle registration also lists color as dark gray.',
+        evidenceIds: ['ev-whatsapp-ss', 'ev-cctv-frame', 'ev-witness-txt'],
+        entities: ['Dark Gray SUV (ABC-1234)'],
+        category: 'visual',
+        severity: 'high' as const,
+        confidence: 0.87,
+      },
+      {
+        id: 'contradiction-1',
+        description: 'Maria states the driver was FEMALE with long hair. Witness James Miller and CCTV analysis indicate the driver was MALE, approximately 30-35 years old.',
+        evidenceIds: ['ev-whatsapp-ss', 'ev-witness-txt', 'ev-cctv-frame'],
+        entities: ['Unknown Male Driver', 'Maria'],
+        category: 'statement',
+        severity: 'critical' as const,
+        confidence: 0.91,
+      },
+      {
+        id: 'contradiction-2',
+        description: 'James Miller reports calling 911 at 8:44 AM. Voice note from Sarah Chen was recorded at approximately 8:43 AM — she does not mention hearing sirens or seeing police, which would be expected if 911 was already called.',
+        evidenceIds: ['ev-witness-txt', 'ev-voice-note'],
+        entities: ['James Miller', 'Sarah Chen'],
+        category: 'temporal',
+        severity: 'medium' as const,
+        confidence: 0.45,
+      },
+    ],
+    relationships: [
+      {
+        id: 'rel-0',
+        sourceId: 'ev-cctv-frame',
+        targetId: 'entity-4',
+        relation: 'confirms',
+        confidence: 0.97,
+        description: 'CCTV footage confirms dark gray SUV at intersection',
+      },
+      {
+        id: 'rel-1',
+        sourceId: 'ev-whatsapp-ss',
+        targetId: 'entity-4',
+        relation: 'contradicts',
+        confidence: 0.87,
+        description: 'WhatsApp witness claims blue SUV, contradicting all other evidence',
+      },
+      {
+        id: 'rel-2',
+        sourceId: 'entity-4',
+        targetId: 'entity-5',
+        relation: 'occurred_at',
+        confidence: 0.95,
+        description: 'Collision between SUV and sedan at Oak & 5th',
+      },
+      {
+        id: 'rel-3',
+        sourceId: 'entity-2',
+        targetId: 'entity-4',
+        relation: 'appears_in',
+        confidence: 0.78,
+        description: 'Unknown male driver was operating the SUV',
+      },
+      {
+        id: 'rel-4',
+        sourceId: 'ev-fir-report',
+        targetId: 'entity-7',
+        relation: 'located_at',
+        confidence: 0.99,
+        description: 'FIR filed at 4th Precinct Police Station',
+      },
+    ],
+    summary:
+      'Car accident investigation at Oak & 5th intersection involving a dark gray SUV (ABC-1234) and a white sedan. Primary witness James Miller and CCTV footage confirm the SUV ran a red light. A key contradiction exists with witness Maria who claims the vehicle was blue and driven by a woman, conflicting with all other evidence. The SUV driver remains unidentified and may have fled the scene before police arrival. Sarah Chen (sedan driver) reported neck pain and was referred to hospital.',
+  };
+
+  store.setExtractedData(investigation.id, extractedData);
+  store.updateInvestigationStatus(investigation.id, 'complete');
+
+  // Return full detail
+  const detail = store.getInvestigationDetail(investigation.id);
+
+  res.status(201).json({ success: true, data: detail });
+});
