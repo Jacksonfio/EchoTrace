@@ -36,6 +36,7 @@ npm-debug.log*
 
 # ── TypeScript ──
 *.tsbuildinfo
+next-env.d.ts
 
 # ── Generated / Temp ──
 .tmp/
