@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EchoTrace AI — Interactive Architecture</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xyflow/react@12.5.5/dist/style.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0A1A;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
+    }
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: #12122A;
+      border-bottom: 1px solid #06B6D4;
+      position: relative;
+      z-index: 10;
+    }
+    #header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #06B6D4;
+    }
+    #header h1 span {
+      color: #fff;
+      font-weight: 400;
+    }
+    #header .badge {
+      background: #06B6D4;
+      color: #0A0A1A;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    #container {
+      width: 100vw;
+      height: calc(100vh - 53px);
+    }
+    .react-flow__node {
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 13px;
+      min-width: 220px;
+      cursor: grab;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: box-shadow 0.2s;
+    }
+    .react-flow__node:active { cursor: grabbing; }
+    .react-flow__node:hover { box-shadow: 0 6px 30px rgba(0,0,0,0.5); }
+    .react-flow__handle { opacity: 0; }
+    .node-layer {
+      color: #fff;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      opacity: 0.8;
+    }
+    .node-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .node-desc {
+      font-size: 12px;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+    .node-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .node-frontend {
+      background: linear-gradient(135deg, #1a1a3e, #16213e);
+      border: 2px solid #06B6D4;
+    }
+    .node-frontend .node-layer { color: #06B6D4; }
+    .node-backend {
+      background: linear-gradient(135deg, #1a1a3e, #1e1338);
+      border: 2px solid #8B5CF6;
+    }
+    .node-backend .node-layer { color: #8B5CF6; }
+    .node-ai {
+      background: linear-gradient(135deg, #1a1a3e, #1e1a10);
+      border: 2px solid #F59E0B;
+    }
+    .node-ai .node-layer { color: #F59E0B; }
+    .node-storage {
+      background: linear-gradient(135deg, #1a1a3e, #0f1a14);
+      border: 2px solid #10B981;
+    }
+    .node-storage .node-layer { color: #10B981; }
+    .node-default {
+      background: #12122A;
+      border: 1px solid #333;
+    }
+    .react-flow__edge-path { stroke-width: 2.5; }
+    .react-flow__edge-label {
+      font-size: 11px;
+      fill: #94A3B8;
+      background: #0A0A1A;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .react-flow__controls {
+      background: #12122A;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .react-flow__controls button {
+      background: #12122A;
+      border-color: #333;
+      color: #fff;
+      fill: #fff;
+    }
+    .react-flow__controls button:hover { background: #1A1A3E; }
+    .react-flow__minimap {
+      background: #12122A;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    .react-flow__attribution { display: none; }
+    @media (max-width: 768px) {
+      .react-flow__node { min-width: 160px; font-size: 11px; padding: 12px 14px; }
+      .node-title { font-size: 13px; }
+      .node-icon { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1>EchoTrace AI <span>&mdash; Interactive Architecture</span></h1>
+    <div class="badge">Drag to move &middot; Scroll to zoom</div>
+  </div>
+  <div id="container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xyflow/react@12.5.5/dist/umd/index.min.js"></script>
+  <script>
+    var RF = window.ReactFlow;
+    var React = window.React;
+    var ReactDOM = window.ReactDOM;
+
+    function ArchitectureNode(_ref) {
+      var data = _ref.data;
+      return React.createElement('div', { className: 'react-flow__node ' + (data.nodeClass || 'node-default') },
+        React.createElement(RF.Handle, { type: 'target', position: RF.Position.Top }),
+        React.createElement('div', { className: 'node-icon' }, data.icon),
+        React.createElement('div', { className: 'node-layer' }, data.layer),
+        React.createElement('div', { className: 'node-title' }, data.title),
+        React.createElement('div', { className: 'node-desc' }, data.description),
+        React.createElement(RF.Handle, { type: 'source', position: RF.Position.Bottom })
+      );
+    }
+
+    var nodeTypes = { architectureNode: ArchitectureNode };
+
+    var initialNodes = [
+      { id: 'f1', type: 'architectureNode', position: { x: 250, y: 20 },
+        data: { icon: '🎨', layer: 'FRONTEND', title: 'Next.js 15 + React 18', description: 'App Router / SSR / File Uploads', nodeClass: 'node-frontend' } },
+      { id: 'f2', type: 'architectureNode', position: { x: 50, y: 150 },
+        data: { icon: '🧩', layer: 'FRONTEND', title: 'UI Components', description: 'Timeline / React Flow Graph / Entity Explorer / Live Copilot', nodeClass: 'node-frontend' } },
+      { id: 'f3', type: 'architectureNode', position: { x: 450, y: 150 },
+        data: { icon: '🎭', layer: 'FRONTEND', title: 'State & Styling', description: 'TanStack Query / Tailwind CSS / shadcn/ui / Framer Motion', nodeClass: 'node-frontend' } },
+      { id: 'b1', type: 'architectureNode', position: { x: 250, y: 330 },
+        data: { icon: '⚙️', layer: 'BACKEND', title: 'Express REST API', description: 'Endpoints / Zod Validation / Routing', nodeClass: 'node-backend' } },
+      { id: 'b2', type: 'architectureNode', position: { x: 50, y: 460 },
+        data: { icon: '🔀', layer: 'BACKEND', title: 'Analysis Pipeline', description: 'Gemini Integration / Mock Fallback / Timeout Handling', nodeClass: 'node-backend' } },
+      { id: 'b3', type: 'architectureNode', position: { x: 450, y: 460 },
+        data: { icon: '🔄', layer: 'BACKEND', title: 'Post-Processing', description: 'Contradiction Detector / Timeline Builder / Relationship Mapper', nodeClass: 'node-backend' } },
+      { id: 'a1', type: 'architectureNode', position: { x: 250, y: 610 },
+        data: { icon: '🧠', layer: 'AI ENGINE', title: 'Google Gemini 1.5 Flash / Pro', description: 'Vision / Audio Transcription / PDF Reasoning / Text Analysis', nodeClass: 'node-ai' } },
+      { id: 's1', type: 'architectureNode', position: { x: 60, y: 770 },
+        data: { icon: '💾', layer: 'STORAGE', title: 'In-Memory Data Store', description: 'Investigations / Entities / Timelines / Analysis Results', nodeClass: 'node-storage' } },
+      { id: 's2', type: 'architectureNode', position: { x: 440, y: 770 },
+        data: { icon: '📂', layer: 'STORAGE', title: 'Local File System', description: 'uploads/ / Evidence Files / Temp Processing', nodeClass: 'node-storage' } },
+      { id: 's3', type: 'architectureNode', position: { x: 250, y: 900 },
+        data: { icon: '☁️', layer: 'STORAGE (Planned)', title: 'Firebase', description: 'Firestore / Storage / Auth', nodeClass: 'node-storage' } },
+    ];
+
+    var initialEdges = [
+      { id: 'e-f1-f2', source: 'f1', target: 'f2', animated: true },
+      { id: 'e-f1-f3', source: 'f1', target: 'f3', animated: true },
+      { id: 'e-f1-b1', source: 'f1', target: 'b1', label: 'HTTP / REST', animated: true, style: { stroke: '#06B6D4' } },
+      { id: 'e-b1-b2', source: 'b1', target: 'b2', animated: true },
+      { id: 'e-b1-b3', source: 'b1', target: 'b3', animated: true },
+      { id: 'e-b2-a1', source: 'b2', target: 'a1', label: 'Analyze', animated: true, style: { stroke: '#F59E0B' } },
+      { id: 'e-a1-b3', source: 'a1', target: 'b3', label: 'Structured JSON', animated: true, style: { stroke: '#F59E0B' } },
+      { id: 'e-b1-s1', source: 'b1', target: 's1', label: 'Store', animated: true, style: { stroke: '#10B981' } },
+      { id: 'e-b1-s2', source: 'b1', target: 's2', label: 'Upload', animated: true, style: { stroke: '#10B981' } },
+      { id: 'e-s1-s3', source: 's1', target: 's3', label: 'Future', style: { stroke: '#10B981', strokeDasharray: '6 4' } },
+      { id: 'e-s2-s3', source: 's2', target: 's3', label: 'Future', style: { stroke: '#10B981', strokeDasharray: '6 4' } },
+    ];
+
+    function App() {
+      var _RF$useNodesState = RF.useNodesState(initialNodes);
+      var nodes = _RF$useNodesState[0];
+      var setNodes = _RF$useNodesState[1];
+      var onNodesChange = _RF$useNodesState[2];
+
+      var _RF$useEdgesState = RF.useEdgesState(initialEdges);
+      var edges = _RF$useEdgesState[0];
+      var setEdges = _RF$useEdgesState[1];
+      var onEdgesChange = _RF$useEdgesState[2];
+
+      return React.createElement('div', { style: { width: '100%', height: '100%' } },
+        React.createElement(RF.ReactFlow, {
+          nodes: nodes,
+          edges: edges,
+          onNodesChange: onNodesChange,
+          onEdgesChange: onEdgesChange,
+          nodeTypes: nodeTypes,
+          fitView: true,
+          fitViewOptions: { padding: 0.2 },
+          minZoom: 0.2,
+          maxZoom: 2.5,
+          defaultEdgeOptions: {
+            style: { stroke: '#333', strokeWidth: 2 },
+            labelStyle: { fill: '#94A3B8', fontSize: 11 },
+            labelBgStyle: { fill: '#0A0A1A', fillOpacity: 0.9 },
+            labelBgPadding: [8, 4],
+            labelBgBorderRadius: 4,
+          },
+          style: { background: '#0A0A1A' },
+        },
+          React.createElement(RF.Controls, { showInteractive: false }),
+          React.createElement(RF.MiniMap, {
+            nodeStrokeColor: '#333',
+            nodeColor: '#1a1a3e',
+            maskColor: 'rgba(10,10,26,0.8)',
+            style: { background: '#12122A', border: '1px solid #333', borderRadius: 8 },
+          }),
+          React.createElement(RF.Background, { variant: RF.BackgroundVariant.Dots, gap: 24, size: 1, color: '#1A1A3E' })
+        )
+      );
+    }
+
+    var container = document.getElementById('container');
+    var root = ReactDOM.createRoot(container);
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>

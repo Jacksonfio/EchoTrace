@@ -127,6 +127,8 @@ EchoTrace AI is a **multimodal investigation assistant** that reconstructs event
 
 The architecture follows a **4-layer design** with clear separation of concerns. Data flows from user uploads through the analysis pipeline and back to the interactive UI.
 
+> 🖱️ **Interactive Version Available** — [Open the live architecture viewer](./docs/architecture-viewer.html) with draggable nodes, pan/zoom, and animated connections.
+
 ```mermaid
 graph TB
     %% ── STYLES ──
