@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
 import type { Investigation } from '@echotrace/shared';
 
 interface SidebarProps {
@@ -12,6 +13,36 @@ interface SidebarProps {
   onLoadDemo: () => void;
   isLoadingDemo: boolean;
   isCreating: boolean;
+}
+
+function UserBadge() {
+  const { user, logout } = useAuth();
+  if (!user) return null;
+
+  return (
+    <div className="flex items-center justify-between gap-2 px-1 py-1.5">
+      <div className="flex items-center gap-2 min-w-0">
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-echo-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white shrink-0">
+          {user.name.charAt(0).toUpperCase()}
+        </div>
+        <div className="min-w-0">
+          <div className="text-xs font-medium text-foreground truncate">{user.name}</div>
+          <div className="text-[10px] text-muted-foreground truncate">{user.email}</div>
+        </div>
+      </div>
+      <button
+        onClick={logout}
+        className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-rose-500/20 text-muted-foreground hover:text-rose-400 transition-all shrink-0"
+        title="Sign out"
+      >
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
+    </div>
+  );
 }
 
 export function Sidebar({
@@ -168,9 +199,12 @@ export function Sidebar({
         </AnimatePresence>
       </div>
 
-      {/* Bottom: Demo + Branding */}
+      {/* Bottom: Demo + User + Branding */}
       {isOpen && (
         <div className="px-3 pb-3 border-t border-surface-300/30 pt-3 shrink-0 space-y-2">
+          {/* User Info */}
+          <UserBadge />
+
           <button
             onClick={onLoadDemo}
             disabled={isLoadingDemo}

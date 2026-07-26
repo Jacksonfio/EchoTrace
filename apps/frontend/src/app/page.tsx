@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
 import { Sidebar } from '@/components/Sidebar';
 import { Timeline } from '@/components/Timeline';
 import { InvestigationSummary } from '@/components/InvestigationSummary';
@@ -29,6 +31,10 @@ import type { Investigation, InvestigationDetail, Evidence } from '@echotrace/sh
 type ViewMode = 'summary' | 'timeline' | 'entities' | 'evidence' | 'compare';
 
 export default function Dashboard() {
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
+  const router = useRouter();
+
+  // ── ALL HOOKS AT TOP LEVEL (before any early returns) ──
   const [investigations, setInvestigations] = useState<Investigation[]>([]);
   const [activeInvestigation, setActiveInvestigation] = useState<InvestigationDetail | null>(null);
   const [activeView, setActiveView] = useState<ViewMode>('timeline');
@@ -38,10 +44,17 @@ export default function Dashboard() {
   const [chatMessages, setChatMessages] = useState<Array<{ role: string; content: string }>>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // Auth redirect — must be a hook, not conditional
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isLoading, isAuthenticated, router]);
+
   // Load investigations on mount
   useEffect(() => {
-    loadInvestigations();
-  }, []);
+    if (isAuthenticated) loadInvestigations();
+  }, [isAuthenticated]);
 
   async function loadInvestigations() {
     try {
@@ -125,9 +138,7 @@ export default function Dashboard() {
 
   const handleSendMessage = useCallback(async (message: string) => {
     if (!activeInvestigation) return;
-    
     setChatMessages(prev => [...prev, { role: 'user', content: message }]);
-    
     try {
       const response = await sendChatMessage(activeInvestigation.id, message);
       setChatMessages(prev => [...prev, { role: 'assistant', content: response.message }]);
@@ -139,6 +150,20 @@ export default function Dashboard() {
   const evidence = activeInvestigation?.evidence || [];
   const contradictions = activeInvestigation?.contradictions || [];
 
+  // ── EARLY RETURNS (after hooks) ──
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <span className="w-8 h-8 border-2 border-echo-500/30 border-t-echo-500 rounded-full animate-spin inline-block mb-3" />
+          <p className="text-sm text-muted-foreground">Loading EchoTrace...</p>
+        </div>
+      </div>
+    );
+  }
+  if (!isAuthenticated) return null;
+
+  // ── RENDER DASHBOARD ──
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar */}
@@ -153,35 +178,35 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar - Larger for visibility */}
-        <header className="h-16 border-b border-surface-300/30 flex items-center justify-between px-6 shrink-0 bg-background/95 backdrop-blur-sm z-10">
-          <div className="flex items-center gap-4 min-w-0">
-            <h1 className="text-lg font-semibold text-foreground truncate">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Bar */}
+        <header className="h-14 md:h-16 border-b border-surface-300/30 flex items-center justify-between px-4 md:px-6 shrink-0 bg-background/95 backdrop-blur-sm z-10">
+          <div className="flex items-center gap-2 md:gap-4 min-w-0">
+            <h1 className="text-sm md:text-lg font-semibold text-foreground truncate">
               {activeInvestigation?.title || 'EchoTrace AI'}
             </h1>
             {activeInvestigation && (
-              <span className="text-xs text-muted-foreground bg-surface-200/50 px-2.5 py-1 rounded-full shrink-0 border border-surface-300/20">
+              <span className="text-[10px] md:text-xs text-muted-foreground bg-surface-200/50 px-1.5 md:px-2.5 py-0.5 md:py-1 rounded-full shrink-0 border border-surface-300/20 hidden sm:inline-block">
                 {activeInvestigation.status}
               </span>
             )}
           </div>
-          
-          <div className="flex items-center gap-3">
-            {/* View Toggle */}
-            <div className="flex bg-surface-200/50 rounded-lg p-0.5">
+
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* View Toggle - scrollable on mobile */}
+            <div className="flex bg-surface-200/50 rounded-lg p-0.5 overflow-x-auto max-w-[160px] md:max-w-none snap-x snap-mandatory">
               {(['summary', 'timeline', 'entities', 'evidence', 'compare'] as ViewMode[]).map(mode => (
                 <button
                   key={mode}
                   onClick={() => setActiveView(mode)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  className={`px-1.5 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-medium rounded-md transition-all snap-start whitespace-nowrap ${
                     activeView === mode
                       ? 'bg-echo-600 text-white shadow-sm'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {mode === 'summary' ? '📊' : mode === 'timeline' ? '⏱' : mode === 'entities' ? '👤' : mode === 'evidence' ? '📎' : '🔍'}
-                  <span className="ml-1.5 hidden sm:inline">
+                  <span className="ml-1 hidden sm:inline">
                     {mode === 'summary' ? 'Overview' : mode === 'timeline' ? 'Timeline' : mode === 'entities' ? 'Entities' : mode === 'evidence' ? 'Evidence' : 'Compare'}
                   </span>
                 </button>
@@ -193,22 +218,22 @@ export default function Dashboard() {
               <button
                 onClick={handleRunAnalysis}
                 disabled={isAnalyzing}
-                className="px-4 py-1.5 text-xs font-medium bg-echo-600 hover:bg-echo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-all flex items-center gap-2 shrink-0"
+                className="px-2 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-medium bg-echo-600 hover:bg-echo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-all flex items-center gap-1 md:gap-2 shrink-0"
               >
                 {isAnalyzing ? (
                   <>
-                    <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Analyzing...
+                    <span className="w-2.5 h-2.5 md:w-3 md:h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="hidden xs:inline">Analyzing...</span>
                   </>
                 ) : (
-                  '🔍 Analyze'
+                  <span className="hidden xs:inline">🔍 Analyze</span>
                 )}
               </button>
             )}
           </div>
         </header>
 
-        {/* Analysis Bar - below header */}
+        {/* Analysis Bar */}
         {activeInvestigation && (
           <AnalysisBar
             isAnalyzing={isAnalyzing}
@@ -225,83 +250,73 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="px-6 py-2 bg-rose-500/10 border-b border-rose-500/20 text-rose-400 text-sm flex items-center justify-between"
+              className="px-4 md:px-6 py-2 bg-rose-500/10 border-b border-rose-500/20 text-rose-400 text-xs md:text-sm flex items-center justify-between"
             >
-              <span>{error}</span>
-              <button onClick={() => setError(null)} className="ml-2 hover:text-rose-300 shrink-0">✕</button>
+              <span className="truncate mr-2">{error}</span>
+              <button onClick={() => setError(null)} className="hover:text-rose-300 shrink-0">✕</button>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Main Content Area - FULL WIDTH, no right panel */}
+        {/* Main Content Area */}
         <div className="flex-1 flex overflow-hidden">
           <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
             {!activeInvestigation ? (
-              <div className="flex-1 flex items-center justify-center p-8">
-                <div className="text-center max-w-lg">
-                  <div className="text-6xl mb-6">🔍</div>
-                  <h2 className="text-2xl font-bold text-foreground mb-3">Welcome to EchoTrace AI</h2>
-                  <p className="text-muted-foreground mb-8 leading-relaxed">
+              <div className="flex-1 flex items-center justify-center p-4 md:p-8">
+                <div className="text-center max-w-sm md:max-w-lg">
+                  <div className="text-4xl md:text-6xl mb-4 md:mb-6">🔍</div>
+                  <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2 md:mb-3">Welcome to EchoTrace AI</h2>
+                  <p className="text-muted-foreground mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
                     Turn scattered evidence into an explainable investigation timeline.
                     Upload photos, screenshots, voice notes, PDFs, and text messages —
                     let AI analyze the relationships, detect contradictions, and build your case.
                   </p>
-                  <div className="grid grid-cols-3 gap-4 text-left">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 text-left">
                     {[
                       { emoji: '📤', title: 'Upload Evidence', desc: 'Drag & drop mixed media files' },
                       { emoji: '🧠', title: 'AI Analysis', desc: 'Gemini extracts entities & events' },
                       { emoji: '📊', title: 'Visual Timeline', desc: 'Interactive investigation graph' },
                     ].map(item => (
-                      <div key={item.title} className="bg-surface-100/50 rounded-xl p-4 border border-surface-300/20">
-                        <div className="text-2xl mb-2">{item.emoji}</div>
-                        <div className="text-sm font-medium text-foreground mb-1">{item.title}</div>
-                        <div className="text-xs text-muted-foreground">{item.desc}</div>
+                      <div key={item.title} className="bg-surface-100/50 rounded-xl p-3 md:p-4 border border-surface-300/20">
+                        <div className="text-xl md:text-2xl mb-1 md:mb-2">{item.emoji}</div>
+                        <div className="text-xs md:text-sm font-medium text-foreground mb-1">{item.title}</div>
+                        <div className="text-[10px] md:text-xs text-muted-foreground">{item.desc}</div>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-8 text-sm text-muted-foreground">
+                  <p className="mt-6 md:mt-8 text-xs md:text-sm text-muted-foreground">
                     Create a new investigation to get started
                   </p>
                 </div>
               </div>
             ) : activeView === 'summary' ? (
-              /* ── FULL-WIDTH OVERVIEW ── */
               <div className="flex-1 overflow-y-auto scrollbar-thin">
-                <div className="max-w-4xl mx-auto py-6 px-8 space-y-6">
-                  {/* Stats + Confidence + Quality row */}
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="col-span-1">
-                      <ClaimConfidenceMeter
-                        evidence={evidence}
-                        contradictions={contradictions}
-                        isAnalyzing={isAnalyzing}
-                      />
+                <div className="max-w-4xl mx-auto py-4 md:py-6 px-4 md:px-8 space-y-4 md:space-y-6">
+                  {/* Stats row: stacks on mobile */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                    <div>
+                      <ClaimConfidenceMeter evidence={evidence} contradictions={contradictions} isAnalyzing={isAnalyzing} />
                     </div>
-                    <div className="col-span-1">
+                    <div>
                       <EvidenceQualityScanner evidence={evidence} />
                     </div>
-                    <div className="col-span-1">
+                    <div>
                       <CaseNotes investigationId={activeInvestigation.id} />
                     </div>
                   </div>
-
-                  {/* Investigation Summary (the core dashboard) */}
                   <div className="rounded-xl border border-surface-300/30 bg-surface/50">
                     <InvestigationSummary investigation={activeInvestigation} />
                   </div>
-
-                  {/* Contradictions section */}
                   <div className="rounded-xl border border-surface-300/30 bg-surface/50">
-                    <div className="p-4">
+                    <div className="p-3 md:p-4">
                       <ContradictionPanel contradictions={contradictions} />
                     </div>
                   </div>
                 </div>
               </div>
             ) : activeView === 'timeline' ? (
-              /* ── FULL-WIDTH TIMELINE ── */
               <div className="flex-1 overflow-y-auto">
-                <div className="max-w-4xl mx-auto p-6">
+                <div className="max-w-4xl mx-auto p-4 md:p-6">
                   <Timeline
                     events={activeInvestigation.timeline || []}
                     evidence={evidence}
@@ -310,7 +325,6 @@ export default function Dashboard() {
                 </div>
               </div>
             ) : activeView === 'entities' ? (
-              /* ── FULL-WIDTH ENTITIES ── */
               <div className="flex-1 overflow-hidden">
                 <EntityRelations
                   entities={activeInvestigation.entities || []}
@@ -319,30 +333,26 @@ export default function Dashboard() {
                 />
               </div>
             ) : activeView === 'compare' ? (
-              /* ── FULL-WIDTH COMPARE ── */
-              <div className="flex-1 overflow-y-auto p-6">
+              <div className="flex-1 overflow-y-auto p-4 md:p-6">
                 <div className="max-w-4xl mx-auto">
                   <EvidenceComparison evidence={evidence} />
                 </div>
               </div>
             ) : (
-              /* ── FULL-WIDTH EVIDENCE ── */
-              <div className="flex-1 overflow-y-auto p-6 scrollbar-thin">
-                <div className="max-w-5xl mx-auto space-y-6">
+              <div className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin">
+                <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
                   <UploadZone onUpload={handleUploadFiles} />
-                  
-                  {/* Evidence grid */}
                   {evidence.length > 0 && (
                     <>
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium text-foreground">
+                        <h3 className="text-xs md:text-sm font-medium text-foreground">
                           Evidence Files ({evidence.length})
                         </h3>
                         <span className="text-[10px] text-muted-foreground">
                           <EvidenceQualityScanner evidence={evidence} compact />
                         </span>
                       </div>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                         {evidence.map(ev => (
                           <EvidenceCard key={ev.id} evidence={ev} />
                         ))}
@@ -350,9 +360,9 @@ export default function Dashboard() {
                     </>
                   )}
                   {evidence.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground">
-                      <div className="text-4xl mb-3">📎</div>
-                      <p className="text-sm">No evidence uploaded yet. Drop files above to begin.</p>
+                    <div className="text-center py-8 md:py-12 text-muted-foreground">
+                      <div className="text-3xl md:text-4xl mb-2 md:mb-3">📎</div>
+                      <p className="text-xs md:text-sm">No evidence uploaded yet. Drop files above to begin.</p>
                     </div>
                   )}
                 </div>
@@ -362,12 +372,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Floating Chat Button + Overlay */}
       {activeInvestigation && (
-        <FloatingChat
-          messages={chatMessages}
-          onSend={handleSendMessage}
-        />
+        <FloatingChat messages={chatMessages} onSend={handleSendMessage} />
       )}
     </div>
   );

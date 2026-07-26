@@ -1,12 +1,14 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Response } from 'express';
 import { store } from '../services/store';
 import { analyzeEvidence } from '../services/gemini';
 import { mockAnalyze } from '../services/mockAnalysis';
+import { authRequired, type AuthRequest } from '../middleware/pythonAuth';
+import { logger } from '../services/logger';
 
 export const analyzeRouter = Router();
 
-// Analyze evidence in an investigation
-analyzeRouter.post('/:investigationId', async (req: Request, res: Response) => {
+// Analyze evidence in an investigation (auth required)
+analyzeRouter.post('/:investigationId', authRequired, async (req: AuthRequest, res: Response) => {
   const inv = store.getInvestigation(req.params.investigationId);
   if (!inv) {
     return res.status(404).json({ success: false, error: 'Investigation not found' });
@@ -22,13 +24,31 @@ analyzeRouter.post('/:investigationId', async (req: Request, res: Response) => {
 
   let result;
   let usedMock = false;
+  let geminiRetries = 0;
+  let geminiRateLimited = false;
+  let geminiErrorLabel: string | undefined;
 
   try {
-    // Try Gemini first
+    // Gemini is the primary path — try it first with retries
+    logger.info(`Starting Gemini analysis for ${req.params.investigationId} (${evidence.length} files)`);
     result = await analyzeEvidence(evidence);
+    geminiRetries = result.retryCount;
+    geminiRateLimited = result.rateLimited;
+    logger.info(
+      `Gemini analysis completed in ${result.processingTimeMs}ms` +
+      (result.retryCount > 0 ? ` (${result.retryCount} retries)` : '')
+    );
   } catch (geminiError: any) {
-    // If Gemini fails (rate limit, quota, etc.), fall back to mock analysis
-    console.warn('Gemini analysis failed, using mock fallback:', geminiError.message?.substring(0, 100));
+    // Extract metadata from enriched error
+    geminiRetries = (geminiError as any).retryCount || 0;
+    geminiRateLimited = (geminiError as any).wasRateLimited || false;
+    geminiErrorLabel = (geminiError as any).classification || 'unknown';
+
+    // Fall back to mock analysis
+    logger.warn(
+      `Gemini analysis failed after ${geminiRetries} retries, using mock fallback. ` +
+      `Error: ${geminiError.message?.substring(0, 150)}`
+    );
     const startTime = Date.now();
     result = {
       data: mockAnalyze(evidence),
@@ -47,12 +67,15 @@ analyzeRouter.post('/:investigationId', async (req: Request, res: Response) => {
       extractedData: result.data,
       processingTimeMs: result.processingTimeMs,
       usedMockAnalysis: usedMock,
+      geminiRetryCount: geminiRetries,
+      geminiRateLimited,
+      geminiError: geminiErrorLabel,
     },
   });
 });
 
-// Get analysis results
-analyzeRouter.get('/:investigationId', (req: Request, res: Response) => {
+// Get analysis results (auth required)
+analyzeRouter.get('/:investigationId', authRequired, (req: AuthRequest, res: Response) => {
   const data = store.getExtractedData(req.params.investigationId);
   if (!data) {
     return res.status(404).json({

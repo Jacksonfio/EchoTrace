@@ -1,0 +1,100 @@
+name: EchoTrace CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: TypeCheck & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: echotrace
+
+      - name: TypeCheck shared
+        run: npm run typecheck -w shared
+        working-directory: echotrace
+
+      - name: TypeCheck server
+        run: npm run typecheck -w server
+        working-directory: echotrace
+
+      - name: TypeCheck frontend
+        run: npm run typecheck -w apps/frontend
+        working-directory: echotrace
+
+  test:
+    name: Unit Tests
+    needs: quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: echotrace
+
+      - name: Run server tests
+        run: npx vitest run
+        working-directory: echotrace/server
+        env:
+          CI: true
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: echotrace
+
+      - name: Build shared
+        run: npm run build -w shared
+        working-directory: echotrace
+
+      - name: Build server
+        run: npm run build -w server
+        working-directory: echotrace
+
+      - name: Build frontend
+        run: npm run build -w apps/frontend
+        working-directory: echotrace
+        env:
+          NEXT_PUBLIC_API_URL: /api
+          NEXT_PUBLIC_AUTH_URL: http://localhost:8000

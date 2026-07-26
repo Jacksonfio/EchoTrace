@@ -12,6 +12,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
 [![Gemini](https://img.shields.io/badge/Gemini-1.5-8E75B2?style=for-the-badge&logo=googlegemini)](https://ai.google.dev/)
 [![Express](https://img.shields.io/badge/Express-4-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python)](https://python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)]()
 
@@ -255,6 +257,8 @@ sequenceDiagram
 |-----------|-------|---------|
 | **Node.js** | [![Node](https://img.shields.io/badge/-339933?style=flat&logo=node.js)](https://nodejs.org/) | JavaScript runtime |
 | **Express** | [![Express](https://img.shields.io/badge/-000000?style=flat&logo=express)](https://expressjs.com/) | REST API framework |
+| **Python 3.13** | [![Python](https://img.shields.io/badge/-3776AB?style=flat&logo=python)](https://python.org/) | Auth microservice |
+| **FastAPI** | [![FastAPI](https://img.shields.io/badge/-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/) | Auth REST API with JWT |
 | **Gemini API 1.5** | [![Gemini](https://img.shields.io/badge/-8E75B2?style=flat&logo=googlegemini)](https://ai.google.dev/) | Multimodal AI reasoning engine |
 | **Zod** | [![Zod](https://img.shields.io/badge-3068B7?style=flat&logo=zod)](https://zod.dev/) | Schema validation |
 | **Concurrently** | [![Concurrently](https://img.shields.io/badge-000000?style=flat)](https://www.npmjs.com/package/concurrently) | Parallel dev servers |
@@ -263,9 +267,11 @@ sequenceDiagram
 
 | Technology | Badge | Purpose |
 |-----------|-------|---------|
+| **SQLite** | [![SQLite](https://img.shields.io/badge/-003B57?style=flat&logo=sqlite)](https://sqlite.org/) | User & session database |
+| **JWT Tokens** | [![JWT](https://img.shields.io/badge/-000000?style=flat&logo=jsonwebtokens)](https://jwt.io/) | Secure authentication |
+| **bcrypt** | [![bcrypt](https://img.shields.io/badge/-3388FF?style=flat)](https://pypi.org/project/bcrypt/) | Password hashing |
 | **Firebase Firestore** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | NoSQL database |
 | **Firebase Storage** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | Evidence file hosting |
-| **Firebase Auth** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | Google Login authentication |
 
 </div>
 
@@ -279,6 +285,7 @@ sequenceDiagram
   
 [![Node](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-9+-CB3837?style=flat&logo=npm)](https://www.npmjs.com/)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python)](https://python.org/)
 [![Gemini Key](https://img.shields.io/badge/Gemini_API-Required-8E75B2?style=flat&logo=googlegemini)](https://aistudio.google.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-Optional-FFCA28?style=flat&logo=firebase)](https://console.firebase.google.com/)
 
@@ -292,7 +299,15 @@ cd EchoTrace
 npm install
 ```
 
-**Step 2 — Configure Environment**
+**Step 2 — Install Python Dependencies**
+
+```bash
+cd auth-server
+pip install -r requirements.txt
+cd ..
+```
+
+**Step 3 — Configure Environment**
 
 ```bash
 cp .env.example .env
@@ -301,18 +316,41 @@ cp .env.example .env
 Edit `.env` with your API keys:
 
 ```env
+# ── Gemini AI ──
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-1.5-flash
+
+# ── Express Backend ──
 PORT=3001
 FRONTEND_URL=http://localhost:3000
+
+# ── Python Auth Service ──
+AUTH_PORT=8000
+JWT_SECRET=change-this-to-a-strong-secret
+AUTH_SERVICE_URL=http://localhost:8000
+
+# ── Frontend ──
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_AUTH_URL=http://localhost:8000
 ```
 
-**Step 3 — Launch**
+**Step 4 — Launch (Three-Terminal Method)**
 
 ```bash
-# Start everything in one command
-npm run dev
+# Terminal 1: Python Auth Service
+cd auth-server
+python -m uvicorn main:app --reload --port 8000
+
+# Terminal 2: Express Backend
+cd server
+npx tsx watch src/index.ts
+
+# Terminal 3: Next.js Frontend
+cd apps/frontend
+npx next dev --port 3000
 ```
+
+Or use the root `npm run dev` command after ensuring the auth service is running separately.
 
 <div align="center">
 <br>
@@ -320,17 +358,18 @@ npm run dev
 | Service | URL |
 |---------|-----|
 | 🌐 **Frontend** | [http://localhost:3000](http://localhost:3000) |
-| 🔌 **Backend API** | [http://localhost:3001](http://localhost:3001) |
+| 🔌 **Express API** | [http://localhost:3001](http://localhost:3001) |
+| 🔐 **Auth Service** | [http://localhost:8000](http://localhost:8000) |
 
 <br>
 </div>
 
-**Step 4 — Load Demo Data**
+**Step 5 — Open the App**
 
-1. Open the browser at `http://localhost:3000`
-2. Click **"🚀 Load Demo Data"** in the sidebar
-3. Select the **"Car Accident"** investigation
-4. Click **"🔍 Analyze"** to run full analysis
+1. Open `http://localhost:3000` in your browser
+2. **Sign up** with email/password or click **"Continue with Google"**
+3. Create a new investigation and upload evidence
+4. Click **"🔍 Analyze"** to run AI analysis
 
 <div align="center">
   
@@ -366,6 +405,11 @@ echotrace/
 │   ├── tailwind.config.js
 │   └── tsconfig.json
 │
+├── 📂 auth-server/               # Python Auth Microservice
+│   ├── main.py                   # FastAPI app with JWT auth
+│   ├── requirements.txt          # Python dependencies
+│   └── tests/                    # Pytest test suite (38 tests)
+│
 ├── 📂 server/                   # Express Backend
 │   ├── src/
 │   │   ├── index.ts             # Server entry point
@@ -375,11 +419,13 @@ echotrace/
 │   │   │   ├── upload.ts          # File upload handling
 │   │   │   ├── chat.ts            # Investigation chat
 │   │   │   └── seed.ts            # Demo data seeder
-│   │   └── services/            # Core services
-│   │       ├── gemini.ts         # Gemini API integration
-│   │       ├── mockAnalysis.ts   # Offline analysis fallback
-│   │       ├── analysis.ts       # Pipeline orchestrator
-│   │       └── store.ts          # Data persistence
+│   │   ├── services/            # Core services
+│   │   │   ├── gemini.ts         # Gemini API with retry + backoff
+│   │   │   ├── mockAnalysis.ts   # Offline analysis fallback
+│   │   │   ├── analysis.ts       # Pipeline orchestrator
+│   │   │   └── store.ts          # Data persistence (SQLite)
+│   │   ├── middleware/           # JWT auth middleware
+│   │   └── __tests__/            # Vitest test suite (30 tests)
 │   └── tsconfig.json
 │
 ├── 📂 shared/                    # Shared Types & Prompts
@@ -402,7 +448,29 @@ echotrace/
 
 ## 📡 API Reference
 
-### Investigations
+### 🔐 Authentication (Python Auth Service — Port 8000)
+
+```http
+GET    /health                     # Health check
+POST   /signup                     # Create account (email, password, name)
+POST   /signin                     # Sign in (email, password) → JWT token
+POST   /verify                     # Verify JWT token
+POST   /refresh                    # Refresh expired JWT token
+POST   /auth/google                # Google OAuth sign-in/sign-up
+```
+
+**Sign-in Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "user": { "id": "uuid", "email": "user@example.com", "name": "John Doe" },
+    "token": "eyJhbGciOiJIUzI1NiIs..."
+  }
+}
+```
+
+### Investigations (Express API — Port 3001)
 
 ```http
 POST   /api/investigations          # Create investigation
@@ -416,13 +484,13 @@ DELETE /api/investigations          # Clear all investigations
 
 ```http
 POST   /api/upload/:id/batch        # Upload evidence files
-POST   /api/analyze/:id             # Run AI analysis
+POST   /api/analyze/:id             # Run AI analysis (with retry + fallback)
 POST   /api/chat/:id                # Ask investigation questions
 ```
 
 ### Response Format
 
-All responses follow a consistent structure:
+All investigation API responses follow a consistent structure:
 
 ```json
 {
@@ -478,6 +546,8 @@ All responses follow a consistent structure:
 - 🔍 **Real-time contradiction detection** — catch mismatches instantly
 - 📸 **AI-guided evidence collection** — reduces resubmission rates
 - 📋 **Explainable AI** — every result cites source evidence with confidence scores
+- 🔐 **Secure authentication** — Google OAuth or email/password with JWT tokens
+- ✅ **68 passing tests** — 38 Python (auth) + 30 Vitest (backend)
 
 ---
 

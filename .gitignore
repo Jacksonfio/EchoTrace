@@ -44,3 +44,15 @@ tmp/
 
 # ── Presentations (generated files) ──
 *.pptx
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# ── Auth service Database ──
+data/
+!data/.gitkeep

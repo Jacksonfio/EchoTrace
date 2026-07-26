@@ -389,7 +389,7 @@ function extractColorMentions(text: string, evidence: Evidence[]): Array<{
     const evText = `${ev.name} ${ev.description || ''}`.toLowerCase();
     for (const color of COLORS) {
       for (const vtype of VEHICLE_TYPES) {
-        if (evText.includes(`${color} ${vtype}`)) {
+        if (evText.includes(`${color} ${vtype.toLowerCase()}`)) {
           vehicleColorMentions.push({
             color,
             vehicleType: vtype,

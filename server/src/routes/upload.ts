@@ -1,23 +1,20 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { store } from '../services/store';
 import type { EvidenceType } from '../../../shared/types';
-import { z } from 'zod';
+import { authRequired, type AuthRequest } from '../middleware/pythonAuth';
 
 const UPLOAD_DIR = path.resolve(__dirname, '../../../uploads');
 
-// Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
+  destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `${uuidv4()}${ext}`);
@@ -26,13 +23,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const allowedMimes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-      'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4',
+      'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4', 'audio/x-m4a',
       'application/pdf',
       'text/plain',
+      'application/json',
+      'video/mp4',
     ];
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
@@ -44,24 +43,21 @@ const upload = multer({
 
 export const uploadRouter = Router();
 
-// Upload evidence file
-uploadRouter.post('/:investigationId', upload.single('file'), (req: Request, res: Response) => {
+// Upload single evidence file (auth required)
+uploadRouter.post('/:investigationId', authRequired, upload.single('file'), (req: AuthRequest, res: Response) => {
   const inv = store.getInvestigation(req.params.investigationId);
   if (!inv) {
     return res.status(404).json({ success: false, error: 'Investigation not found' });
   }
-
   if (!req.file) {
     return res.status(400).json({ success: false, error: 'No file provided' });
   }
 
   const file = req.file;
-  const evidenceType = (req.body.type || inferType(file.mimetype));
-
   const evidence = {
     id: uuidv4(),
     investigationId: req.params.investigationId,
-    type: evidenceType,
+    type: (req.body.type || inferType(file.mimetype)) as EvidenceType,
     name: req.body.name || file.originalname,
     description: req.body.description || undefined,
     fileUrl: `/uploads/${file.filename}`,
@@ -72,17 +68,15 @@ uploadRouter.post('/:investigationId', upload.single('file'), (req: Request, res
   };
 
   store.addEvidence(req.params.investigationId, evidence);
-
   res.status(201).json({ success: true, data: evidence });
 });
 
-// Upload multiple files
-uploadRouter.post('/:investigationId/batch', upload.array('files', 10), (req: Request, res: Response) => {
+// Upload multiple files (auth required)
+uploadRouter.post('/:investigationId/batch', authRequired, upload.array('files', 10), (req: AuthRequest, res: Response) => {
   const inv = store.getInvestigation(req.params.investigationId);
   if (!inv) {
     return res.status(404).json({ success: false, error: 'Investigation not found' });
   }
-
   const files = req.files as Express.Multer.File[];
   if (!files || files.length === 0) {
     return res.status(400).json({ success: false, error: 'No files provided' });
@@ -91,7 +85,7 @@ uploadRouter.post('/:investigationId/batch', upload.array('files', 10), (req: Re
   const evidenceItems = files.map(file => ({
     id: uuidv4(),
     investigationId: req.params.investigationId,
-    type: inferType(file.mimetype),
+    type: inferType(file.mimetype) as EvidenceType,
     name: file.originalname,
     fileUrl: `/uploads/${file.filename}`,
     filePath: file.path,
@@ -103,13 +97,13 @@ uploadRouter.post('/:investigationId/batch', upload.array('files', 10), (req: Re
   for (const ev of evidenceItems) {
     store.addEvidence(req.params.investigationId, ev);
   }
-
   res.status(201).json({ success: true, data: evidenceItems });
 });
 
 function inferType(mimeType: string): EvidenceType {
   if (mimeType.startsWith('image/')) return 'image';
   if (mimeType.startsWith('audio/')) return 'audio';
+  if (mimeType.startsWith('video/')) return 'video_frame';
   if (mimeType === 'application/pdf') return 'pdf';
   if (mimeType === 'text/plain') return 'text';
   return 'screenshot';

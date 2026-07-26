@@ -83,6 +83,7 @@ export interface Investigation {
   title: string;
   description?: string;
   status: InvestigationStatus;
+  userId?: string;
   createdAt: string;
   updatedAt: string;
   evidenceCount: number;
