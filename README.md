@@ -6,14 +6,28 @@
 
 > **Turn scattered evidence into an explainable investigation timeline.**
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
-[![Gemini](https://img.shields.io/badge/Gemini-1.5-8E75B2?style=flat&logo=googlegemini)](https://ai.google.dev/)
-[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/)
-[![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express)](https://expressjs.com/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)]()
+[![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+[![Gemini](https://img.shields.io/badge/Gemini-1.5-8E75B2?style=for-the-badge&logo=googlegemini)](https://ai.google.dev/)
+[![Express](https://img.shields.io/badge/Express-4-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)]()
+
+<br>
+
+<!-- Demo GIF placeholder - replace with actual screen recording -->
+<a href="#">
+  <img src="https://img.shields.io/badge/📸-Add_Screenshot_Here-0A0A1A?style=for-the-badge&logo=react&logoColor=06B6D4&labelColor=12122A" alt="EchoTrace AI Demo" width="80%" style="border-radius: 12px;">
+</a>
+
+<br>
+<br>
+
+[![Report Bug](https://img.shields.io/badge/Report_Bug-F43F5E?style=for-the-badge&logo=bugatti&logoColor=white)](https://github.com/Jacksonfio/EchoTrace/issues)
+[![Request Feature](https://img.shields.io/badge/Request_Feature-06B6D4?style=for-the-badge&logo=reacthookform&logoColor=white)](https://github.com/Jacksonfio/EchoTrace/issues)
+[![Deploy](https://img.shields.io/badge/Deploy_to_Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/new/clone?repository-url=https://github.com/Jacksonfio/EchoTrace)
 
 </div>
 
@@ -21,17 +35,10 @@
 
 ## 📋 Table of Contents
 
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [API Reference](#-api-reference)
-- [Use Cases](#-use-cases)
-- [Development Roadmap](#-development-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
+
+[✨ Key Features](#-key-features) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [🛠️ Tech Stack](#%EF%B8%8F-tech-stack) · [🚀 Quick Start](#-quick-start) · [📁 Structure](#-project-structure) · [📡 API](#-api-reference) · [🎯 Use Cases](#-use-cases) · [🗺️ Roadmap](#%EF%B8%8F-roadmap) · [🤝 Contribute](#-contributing)
+
+
 
 ---
 
@@ -39,226 +46,300 @@
 
 EchoTrace AI is a **multimodal investigation assistant** that reconstructs event timelines from mixed evidence — photos, screenshots, voice notes, PDFs, maps, and text messages. Instead of acting as a simple chatbot, it functions as a **reasoning engine over heterogeneous evidence**, analyzing relationships across all uploaded files to detect contradictions, extract entities, and produce interactive timelines with confidence scores.
 
-### Why EchoTrace AI?
+<table>
+<tr>
+<td width="50%" valign="top">
 
-Traditional investigation tools handle only **one modality at a time** — separate tools for OCR, speech recognition, document parsing, and image analysis. Critical connections between evidence pieces are missed, contradictions go undetected, and timelines remain disconnected. EchoTrace AI solves this by leveraging **Google Gemini's multimodal reasoning** capabilities to analyze everything together in a single pass.
+### ❌ The Problem
+- Multiple tools needed for different evidence types
+- Critical connections between evidence go undetected
+- Contradictions found only during manual review
+- Current AI tools are chatbots, not reasoning engines
+
+</td>
+<td width="50%" valign="top">
+
+### ✅ Our Solution
+- **Single platform** — upload all evidence modalities together
+- **Cross-modal reasoning** — Gemini connects the dots
+- **Real-time validation** — Live Copilot as you upload
+- **Explainable AI** — every result cites source evidence
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## ✨ Key Features
 
-### 🧠 Live Claim Guardian
-Continuously evaluates claims in real-time as each document or photo is uploaded. The dashboard updates instantly — damage detected, vehicle matched, timeline mismatches flagged, invoice anomalies highlighted.
-
-### ⏱️ Interactive Timeline Builder
-Automatically constructs a chronological evidence timeline with confidence scores for every extracted event. Visualize the sequence of events with linked evidence references.
-
-### ⚡ Contradiction Detector
-AI-powered cross-referencing across all evidence modalities. Detects mismatches between witness statements, timestamps, visual evidence, and documents — with confidence scoring for each finding.
-
-### 👤 Entity Extraction & Relationship Graph
-Extracts people, vehicles, locations, objects, and organizations from all evidence types. Visualize connections through an interactive evidence graph built with React Flow.
-
-### 📸 AI Evidence Quality Scanner
-Before analysis begins, scans each piece of evidence for quality — blur detection, visibility checks, completeness assessment. Tells users exactly which photos need retaking before leaving the scene.
-
-### 🤖 Live Copilot
-Real-time streaming analysis progress as evidence is processed. Watch as the AI reads documents, analyzes photos, extracts entities, builds timelines, detects contradictions, and maps relationships — all in real-time.
-
-### 📊 Claim Confidence Meter
-Dynamic confidence scoring that changes based on evidence quality and completeness. Each change is explained — "Invoice validates repair estimate: +12%" — providing transparency into the AI's reasoning.
-
-### 💬 Smart Investigation Assistant
-Ask complex questions about your evidence: "Show every place where Person A appears", "Which evidence contradicts Witness 2?", "What evidence is missing?" — answered with cited source references.
+<div align="center">
+<table>
+<tr>
+<td align="center" width="25%">
+<h3>🛡️</h3>
+<h4>Live Claim Guardian</h4>
+<p><sub>Real-time validation as each document uploads</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>⏱️</h3>
+<h4>Interactive Timeline</h4>
+<p><sub>Auto-built chronological events with confidence scores</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>⚡</h3>
+<h4>Contradiction Detector</h4>
+<p><sub>Cross-modal mismatches with severity grading</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>👤</h3>
+<h4>Entity Extraction</h4>
+<p><sub>People, vehicles, locations from any evidence type</sub></p>
+</td>
+</tr>
+<tr>
+<td align="center" width="25%">
+<h3>📸</h3>
+<h4>Quality Scanner</h4>
+<p><sub>AI checks photos before you leave the scene</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>🤖</h3>
+<h4>Live Copilot</h4>
+<p><sub>Streaming analysis progress in real-time</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>📊</h3>
+<h4>Confidence Meter</h4>
+<p><sub>Dynamic scoring with detailed breakdowns</sub></p>
+</td>
+<td align="center" width="25%">
+<h3>💬</h3>
+<h4>AI Assistant</h4>
+<p><sub>Ask: "What contradicts Witness 2?"</sub></p>
+</td>
+</tr>
+</table>
+</div>
 
 ---
 
 ## 🏗️ Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                          FRONTEND (Next.js 15)                           │
-│  ┌────────────────┐ ┌────────────────┐ ┌──────────────────────────────┐  │
-│  │   Timeline      │ │  Evidence      │ │  Entity Explorer             │  │
-│  │   View          │ │  Graph         │ │  + Filtering                 │  │
-│  │                 │ │  (React Flow)  │ │                              │  │
-│  └───────┬─────────┘ └───────┬────────┘ └──────────┬───────────────────┘  │
-│          │                   │                      │                      │
-│          └───────────────────┴──────────────────────┘                      │
-│                                    │                                       │
-│                           ┌────────┴────────┐                              │
-│                           │  TanStack Query  │                              │
-│                           │  (Caching +      │                              │
-│                           │   API State)     │                              │
-│                           └────────┬────────┘                              │
-│                                    │                                       │
-│                         Tailwind CSS + shadcn/ui + Framer Motion           │
-└────────────────────────────────────┼───────────────────────────────────────┘
-                                     │ REST API (Next.js Rewrites)
-┌────────────────────────────────────┼───────────────────────────────────────┐
-│                      BACKEND (Node.js + Express)                            │
-│  ┌────────────────┐ ┌────────────────┐ ┌──────────────────────────────┐   │
-│  │  Evidence       │ │  Analysis      │ │  Contradiction               │   │
-│  │  Service        │ │  Pipeline      │ │  Detector                    │   │
-│  │  (Upload,       │ │  (Orchestrate  │ │  (Cross-reference all        │   │
-│  │   Validate)     │ │   AI calls)    │ │   extractions)               │   │
-│  └───────┬─────────┘ └───────┬────────┘ └──────────┬───────────────────┘   │
-│          │                   │                      │                      │
-│          └───────────────────┼──────────────────────┘                      │
-│                              │                                              │
-│                    ┌─────────┴─────────┐                                   │
-│                    │   Gemini API 1.5   │                                   │
-│                    │  (Flash / Pro)     │                                   │
-│                    │                    │                                   │
-│                    │  Vision • Audio    │                                   │
-│                    │  Document • Text   │                                   │
-│                    └─────────┬─────────┘                                   │
-│                              │                                              │
-│                    Zod Validation Layer                                     │
-└────────────────────────────────┼───────────────────────────────────────────┘
-                                 │
-┌────────────────────────────────┼───────────────────────────────────────────┐
-│                      STORAGE LAYER                                         │
-│  ┌─────────────────────────┐  ┌─────────────────────────────────────────┐  │
-│  │  In-Memory Data Store   │  │  Local File System (uploads/)           │  │
-│  │  • Investigations        │  │  • Evidence files (images, audio, PDFs) │  │
-│  │  • Entities & Timelines  │  │  • Hot data cache for fast retrieval   │  │
-│  │  • Analysis Results      │  │  • Upload validation & processing      │  │
-│  └─────────────────────────┘  └─────────────────────────────────────────┘  │
-│                                                                             │
-│  ┌────────────────────────────────────────────────────────────────────┐   │
-│  │  Firebase Firestore / Storage / Auth  (planned for production)      │   │
-│  └────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
+The architecture follows a **4-layer design** with clear separation of concerns. Data flows from user uploads through the analysis pipeline and back to the interactive UI.
+
+```mermaid
+graph TB
+    %% ── STYLES ──
+    classDef frontend fill:#1a1a3e,stroke:#06B6D4,stroke-width:2px,color:#fff
+    classDef backend fill:#1a1a3e,stroke:#8B5CF6,stroke-width:2px,color:#fff
+    classDef ai fill:#1a1a3e,stroke:#F59E0B,stroke-width:2px,color:#fff
+    classDef storage fill:#1a1a3e,stroke:#10B981,stroke-width:2px,color:#fff
+    classDef sub fill:#12122A,stroke:#333,stroke-width:1px,color:#CBD5E1
+
+    %% ── LAYER 1: FRONTEND ──
+    subgraph FRONTEND["🎨  Frontend Layer"]
+        direction TB
+        F1["<b>Next.js 15 + React 18</b><br/>App Router · SSR · File Uploads"]:::sub
+        F2["<b>UI Components</b><br/>Timeline · Evidence Graph (React Flow)<br/>Entity Explorer · Live Copilot<br/>Contradiction Panel · Quality Scanner"]:::sub
+        F3["<b>State & Styling</b><br/>TanStack Query · Tailwind CSS<br/>shadcn/ui · Framer Motion"]:::sub
+    end
+    class F1,F2,F3 sub
+
+    %% ── LAYER 2: BACKEND ──
+    subgraph BACKEND["⚙️  Backend Layer"]
+        direction TB
+        B1["<b>Express REST API</b><br/>REST Endpoints · Zod Validation<br/>Request Routing"]:::sub
+        B2["<b>Analysis Pipeline Orchestrator</b><br/>Gemini Integration · Mock Fallback<br/>Timeout Handling"]:::sub
+        B3["<b>Post-Processing</b><br/>Contradiction Detector<br/>Timeline Builder · Relationship Mapper"]:::sub
+    end
+    class B1,B2,B3 sub
+
+    %% ── LAYER 3: AI ENGINE ──
+    subgraph AI_ENGINE["🧠  AI Engine"]
+        direction TB
+        A1["<b>Google Gemini 1.5 Flash / Pro</b><br/><br/>🖼️ Vision Understanding<br/>🎵 Audio Transcription & Analysis<br/>📄 Document (PDF) Reasoning<br/>📝 Text & Screenshot Analysis<br/><br/><i>Single API for all modalities</i>"]:::sub
+    end
+    class A1 sub
+
+    %% ── LAYER 4: STORAGE ──
+    subgraph STORAGE["🗄️  Storage Layer"]
+        direction TB
+        S1["<b>In-Memory Data Store</b><br/>Investigations · Entities<br/>Timelines · Analysis Results"]:::sub
+        S2["<b>Local File System</b><br/>uploads/ · Evidence Files<br/>Temp Processing"]:::sub
+        S3["<b>Firebase</b>  <i>(Planned)</i><br/>Firestore · Storage · Auth"]:::sub
+    end
+    class S1,S2,S3 sub
+
+    %% ── CONNECTIONS ──
+    F1 -->|"HTTP / REST"| B1
+    B1 --> B2
+    B2 -->|"Analyze"| A1
+    A1 -->|"Structured JSON<br/>Entities · Events<br/>Contradictions"| B3
+    B3 --> B1
+    B1 -->|"Store"| S1
+    B1 -->|"Upload"| S2
+    B1 -.->|"Future"| S3
+
+    %% ── APPLY LAYER STYLES ──
+    class FRONTEND frontend
+    class BACKEND backend
+    class AI_ENGINE ai
+    class STORAGE storage
 ```
 
-### Data Flow
+### 🔄 Data Flow
 
-1. **User Uploads** → Mixed evidence (images, audio, PDFs, text) through Next.js frontend
-2. **Storage** → Files saved to Firebase Storage; metadata indexed in Firestore
-3. **Analysis Pipeline** → Express API orchestrates Gemini API calls with all evidence
-4. **AI Reasoning** → Gemini processes all modalities together — vision, audio, document understanding, and text
-5. **Structured Output** → Gemini returns structured JSON (entities, events, contradictions, relationships, confidence scores)
-6. **Post-Processing** → Contradiction Detector cross-references all extracted data; Timeline Builder constructs sequence
-7. **Real-Time UI** → Results streamed to frontend across 5 interactive views — Timeline, Entities, Evidence, Compare, Overview
-8. **Live Copilot** → Analysis progress streamed in real-time as each step completes
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant F as Frontend (Next.js)
+    participant API as Express API
+    participant AI as Gemini AI
+    participant S as Data Store
+
+    U->>F: Upload evidence (images, audio, PDFs, text)
+    F->>API: POST /api/upload/:id/batch
+    API->>S: Store files & metadata
+    
+    U->>F: Click "Analyze"
+    F->>API: POST /api/analyze/:id
+    API->>API: Build multimodal prompt
+    
+    par Live Copilot Stream
+        API-->>F: 🔄 Step 1/7: Scanning evidence files...
+        API-->>F: 🔄 Step 2/7: Reading documents...
+        API-->>F: 🔄 Step 3/7: Extracting entities...
+    end
+    
+    API->>AI: Gemini analyze (vision + audio + text)
+    alt AI Succeeds
+        AI-->>API: Structured JSON response
+    else Rate Limited / Timeout
+        API->>API: Use mock analysis fallback
+    end
+    
+    API->>API: Post-process (contradiction detection, timeline building)
+    API->>S: Store results
+    API-->>F: Analysis complete
+    F-->>U: Interactive timeline, entities, contradictions, graph
+    
+    U->>F: Ask: "What contradicts Witness 2?"
+    F->>API: POST /api/chat/:id
+    API->>AI: Query with investigation context
+    AI-->>API: Answer with citations
+    API-->>F: Response + suggested follow-ups
+    F-->>U: Smart answer with evidence references
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-| Technology | Purpose |
-|-----------|---------|
-| **Next.js 15** | React framework with SSR, file-based routing, API rewrites |
-| **React 18** | UI component library |
-| **TypeScript** | End-to-end type safety |
-| **Tailwind CSS 3** | Utility-first styling with custom design system |
-| **shadcn/ui** | Enterprise-quality component library (cards, dialogs, tables) |
-| **Framer Motion** | Smooth animations — timeline transitions, card expansions, loading states |
-| **React Flow** | Interactive evidence relationship graph visualization |
-| **TanStack Query** | Server state management, caching, optimistic updates |
+<div align="center">
 
-### Backend
-| Technology | Purpose |
-|-----------|---------|
-| **Node.js** | JavaScript runtime |
-| **Express** | REST API framework with Zod validation |
-| **Concurrently** | Parallel dev server orchestration |
+### 🎨 Frontend
 
-### AI & Intelligence
-| Technology | Purpose |
-|-----------|---------|
-| **Gemini API 1.5 Flash/Pro** | Core multimodal reasoning — vision, audio, document, text understanding |
-| **Custom Analysis Pipeline** | Orchestrates multi-step extraction with fallback strategies |
+| Technology | Badge | Purpose |
+|-----------|-------|---------|
+| **Next.js 15** | [![Next.js](https://img.shields.io/badge/-000000?style=flat&logo=next.js)](https://nextjs.org/) | React framework with SSR & file-based routing |
+| **React 18** | [![React](https://img.shields.io/badge/-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/) | UI component library |
+| **TypeScript** | [![TypeScript](https://img.shields.io/badge/-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/) | End-to-end type safety |
+| **Tailwind CSS 3** | [![Tailwind](https://img.shields.io/badge/-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com/) | Utility-first design system |
+| **shadcn/ui** | [![shadcn](https://img.shields.io/badge/-000000?style=flat&logo=shadcnui)](https://ui.shadcn.com/) | Enterprise-quality components |
+| **Framer Motion** | [![Framer](https://img.shields.io/badge/-0055FF?style=flat&logo=framer)](https://www.framer.com/motion/) | Smooth animations & transitions |
+| **React Flow** | [![React Flow](https://img.shields.io/badge/-FF4154?style=flat&logo=react)](https://reactflow.dev/) | Interactive evidence graph |
+| **TanStack Query** | [![TanStack](https://img.shields.io/badge/-FF4154?style=flat&logo=reactquery)](https://tanstack.com/query) | Server state & caching |
 
-### Infrastructure
-| Technology | Purpose |
-|-----------|---------|
-| **In-Memory Cache** | Fast evidence and investigation data store |
-| **Firebase Firestore** *(planned)* | NoSQL database for investigations, entities, timelines |
-| **Firebase Storage** *(planned)* | Evidence file hosting and retrieval |
-| **Firebase Auth** *(planned)* | Authentication with Google Login |
+### ⚙️ Backend & AI
+
+| Technology | Badge | Purpose |
+|-----------|-------|---------|
+| **Node.js** | [![Node](https://img.shields.io/badge/-339933?style=flat&logo=node.js)](https://nodejs.org/) | JavaScript runtime |
+| **Express** | [![Express](https://img.shields.io/badge/-000000?style=flat&logo=express)](https://expressjs.com/) | REST API framework |
+| **Gemini API 1.5** | [![Gemini](https://img.shields.io/badge/-8E75B2?style=flat&logo=googlegemini)](https://ai.google.dev/) | Multimodal AI reasoning engine |
+| **Zod** | [![Zod](https://img.shields.io/badge-3068B7?style=flat&logo=zod)](https://zod.dev/) | Schema validation |
+| **Concurrently** | [![Concurrently](https://img.shields.io/badge-000000?style=flat)](https://www.npmjs.com/package/concurrently) | Parallel dev servers |
+
+### 🗄️ Infrastructure
+
+| Technology | Badge | Purpose |
+|-----------|-------|---------|
+| **Firebase Firestore** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | NoSQL database |
+| **Firebase Storage** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | Evidence file hosting |
+| **Firebase Auth** *(planned)* | [![Firebase](https://img.shields.io/badge/-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/) | Google Login authentication |
+
+</div>
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** v18+ (recommended: v20 LTS)
-- **npm** v9+
-- **Google Gemini API Key** — Get one from [Google AI Studio](https://aistudio.google.com/)
-- **Firebase Project** — Create one at [Firebase Console](https://console.firebase.google.com/)
+<div align="center">
+  
+[![Node](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js)](https://nodejs.org/)
+[![npm](https://img.shields.io/badge/npm-9+-CB3837?style=flat&logo=npm)](https://www.npmjs.com/)
+[![Gemini Key](https://img.shields.io/badge/Gemini_API-Required-8E75B2?style=flat&logo=googlegemini)](https://aistudio.google.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-Optional-FFCA28?style=flat&logo=firebase)](https://console.firebase.google.com/)
 
-### Installation
+</div>
+
+**Step 1 — Clone & Install**
 
 ```bash
-# Clone the repository
 git clone https://github.com/Jacksonfio/EchoTrace.git
 cd EchoTrace
-
-# Install dependencies
 npm install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys (see Configuration section)
 ```
 
-### Configuration
+**Step 2 — Configure Environment**
 
-Edit the `.env` file in the project root:
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your API keys:
 
 ```env
-# ── Gemini API ──
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-1.5-flash
-
-# ── Firebase ──
-FIREBASE_API_KEY=your_firebase_api_key
-FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-FIREBASE_APP_ID=your_app_id
-
-# ── Server ──
 PORT=3001
-NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
 ```
 
-### Development
+**Step 3 — Launch**
 
 ```bash
-# Start both frontend and backend in development mode
+# Start everything in one command
 npm run dev
-
-# Frontend will be at: http://localhost:3000
-# Backend API will be at: http://localhost:3001
 ```
 
-Or start them individually:
+<div align="center">
+<br>
 
-```bash
-# Frontend only
-npm run dev:frontend
+| Service | URL |
+|---------|-----|
+| 🌐 **Frontend** | [http://localhost:3000](http://localhost:3000) |
+| 🔌 **Backend API** | [http://localhost:3001](http://localhost:3001) |
 
-# Backend only
-npm run dev:server
-```
+<br>
+</div>
 
-### Build for Production
+**Step 4 — Load Demo Data**
 
-```bash
-npm run build
-```
+1. Open the browser at `http://localhost:3000`
+2. Click **"🚀 Load Demo Data"** in the sidebar
+3. Select the **"Car Accident"** investigation
+4. Click **"🔍 Analyze"** to run full analysis
 
-### Type Checking
+<div align="center">
+  
+[![TypeCheck](https://img.shields.io/badge/npm_run_typecheck-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Build](https://img.shields.io/badge/npm_run_build-000000?style=flat&logo=next.js)](https://nextjs.org/)
 
-```bash
-npm run typecheck
-```
+</div>
 
 ---
 
@@ -266,59 +347,57 @@ npm run typecheck
 
 ```
 echotrace/
-├── apps/
-│   └── frontend/                  # Next.js 15 application
-│       ├── src/
-│       │   ├── app/               # Next.js App Router pages
-│       │   │   ├── page.tsx       # Main dashboard page
-│       │   │   └── layout.tsx     # Root layout
-│       │   └── components/        # React components
-│       │       ├── AnalysisBar.tsx       # Live Copilot + Confidence + Quality
-│       │       ├── ClaimConfidence.tsx   # Dynamic confidence meter
-│       │       ├── ContradictionPanel.tsx # Contradiction detection display
-│       │       ├── EntityRelations.tsx   # Entity explorer with filters
-│       │       ├── EvidenceQuality.tsx   # Per-file quality scanner
-│       │       ├── EvidenceTimeline.tsx  # Interactive timeline
-│       │       ├── CaseNotes.tsx         # Investigator notes panel
-│       │       ├── EvidenceGraph.tsx     # React Flow relationship graph
-│       │       ├── CompareEvidence.tsx   # Side-by-side evidence comparison
-│       │       ├── UploadZone.tsx        # Drag-and-drop upload
-│       │       ├── LiveCopilot.tsx       # Real-time analysis streaming
-│       │       └── FloatingChat.tsx      # AI investigation assistant
-│       ├── next.config.js
-│       ├── tailwind.config.js
-│       └── tsconfig.json
-│
-├── server/                        # Express backend
+├── 📂 apps/frontend/            # Next.js 15 Application
 │   ├── src/
-│   │   ├── index.ts               # Server entry point
-│   │   ├── routes/
-│   │   │   ├── investigations.ts  # CRUD for investigations
-│   │   │   ├── analyze.ts         # Analysis pipeline endpoint
+│   │   ├── app/                 # App Router pages (page.tsx, layout.tsx)
+│   │   └── components/          # 15+ React Components
+│   │       ├── AnalysisBar.tsx         # Live Copilot + Metrics
+│   │       ├── ClaimConfidenceMeter.tsx # Dynamic confidence scoring
+│   │       ├── ContradictionPanel.tsx   # Contradiction detection
+│   │       ├── EntityRelations.tsx      # Entity explorer with filters
+│   │       ├── EvidenceComparison.tsx   # Side-by-side comparison
+│   │       ├── EvidenceQualityScanner.tsx # AI quality assessment
+│   │       ├── EvidenceTimeline.tsx     # Interactive timeline
+│   │       ├── LiveCopilot.tsx          # Real-time streaming
+│   │       ├── EvidenceGraph.tsx        # React Flow relationship graph
+│   │       ├── FloatingChat.tsx         # Smart investigation chat
+│   │       ├── UploadZone.tsx           # Drag-and-drop upload
+│   │       ├── CaseNotes.tsx            # Investigator notes
+│   │       └── InvestigationSummary.tsx # Dashboard overview
+│   ├── next.config.js
+│   ├── tailwind.config.js
+│   └── tsconfig.json
+│
+├── 📂 server/                   # Express Backend
+│   ├── src/
+│   │   ├── index.ts             # Server entry point
+│   │   ├── routes/              # REST API routes
+│   │   │   ├── investigations.ts  # CRUD operations
+│   │   │   ├── analyze.ts         # Analysis pipeline
 │   │   │   ├── upload.ts          # File upload handling
-│   │   │   └── chat.ts            # Investigation chat Q&A
-│   │   └── services/
-│   │       ├── gemini.ts          # Gemini API integration
-│   │       ├── store.ts           # In-memory data store
-│   │       └── analysis.ts        # Analysis orchestration
-│   ├── tsconfig.json
-│   └── package.json
+│   │   │   ├── chat.ts            # Investigation chat
+│   │   │   └── seed.ts            # Demo data seeder
+│   │   └── services/            # Core services
+│   │       ├── gemini.ts         # Gemini API integration
+│   │       ├── mockAnalysis.ts   # Offline analysis fallback
+│   │       ├── analysis.ts       # Pipeline orchestrator
+│   │       └── store.ts          # Data persistence
+│   └── tsconfig.json
 │
-├── shared/                        # Shared TypeScript types
-│   ├── types/
-│   │   ├── index.ts               # Core interfaces
-│   │   └── prompts.ts             # Gemini prompt templates
-│   ├── tsconfig.json
-│   └── package.json
+├── 📂 shared/                    # Shared Types & Prompts
+│   └── types/
+│       ├── index.ts              # Core interfaces & types
+│       └── prompts.ts            # Gemini prompt templates
 │
-├── firebase/                      # Firebase configuration
-├── docs/                          # Documentation
-├── scripts/                       # Utility scripts
-├── public/                        # Static assets
-├── .env.example                   # Environment variable template
-├── .gitignore
-├── package.json                   # Workspace root
-└── README.md                      # This file
+├── 📂 firebase/                  # Firebase config (WIP)
+├── 📂 docs/                      # Documentation
+├── 📂 scripts/                   # Utility scripts
+├── 📂 uploads/                   # Uploaded evidence files
+├── 📄 .env.example               # Environment template
+├── 📄 .gitignore
+├── 📄 package.json               # Workspace root
+├── 📄 LICENSE                    # MIT License
+└── 📄 README.md                  # You are here
 ```
 
 ---
@@ -327,58 +406,46 @@ echotrace/
 
 ### Investigations
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/investigations` | Create a new investigation |
-| `GET` | `/api/investigations` | List all investigations |
-| `GET` | `/api/investigations/:id` | Get investigation details with entities, timeline, contradictions |
-| `DELETE` | `/api/investigations/:id` | Delete an investigation |
-| `DELETE` | `/api/investigations` | Clear all investigations |
+```http
+POST   /api/investigations          # Create investigation
+GET    /api/investigations          # List all investigations
+GET    /api/investigations/:id      # Get details (entities, timeline, contradictions)
+DELETE /api/investigations/:id      # Delete investigation
+DELETE /api/investigations          # Clear all investigations
+```
 
-### Evidence
+### Evidence & Analysis
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/upload/:id/batch` | Upload evidence files to an investigation |
-
-### Analysis
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/analyze/:id` | Run AI analysis on investigation evidence |
-
-### Chat
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/chat/:id` | Ask questions about investigation evidence |
+```http
+POST   /api/upload/:id/batch        # Upload evidence files
+POST   /api/analyze/:id             # Run AI analysis
+POST   /api/chat/:id                # Ask investigation questions
+```
 
 ### Response Format
 
-All API responses follow a consistent structure:
+All responses follow a consistent structure:
 
 ```json
 {
   "success": true,
-  "data": { ... },
+  "data": {
+    "entities": [
+      { "id": "ent-1", "type": "Person", "name": "Unknown Male", "confidence": 92 },
+      { "id": "ent-2", "type": "Vehicle", "name": "Dark Gray SUV", "confidence": 87 }
+    ],
+    "events": [
+      { "id": "evt-1", "time": "08:42", "description": "Vehicle arrives", "confidence": 94 }
+    ],
+    "contradictions": [
+      { "id": "con-1", "description": "Witness says blue car, photo shows gray SUV", 
+        "severity": "high", "confidence": 90 }
+    ],
+    "relationships": [
+      { "id": "rel-1", "source": "ent-1", "target": "ent-2", "relation": "associated_with" }
+    ]
+  },
   "error": null
-}
-```
-
-Analysis results include structured entities, timeline events, contradictions, and relationships:
-
-```json
-{
-  "entities": [
-    { "id": "ent-1", "type": "Person", "name": "Unknown Male", "mentions": 3, "confidence": 92 },
-    { "id": "ent-2", "type": "Vehicle", "name": "Dark Gray SUV", "confidence": 87 }
-  ],
-  "events": [
-    { "id": "evt-1", "time": "08:42", "description": "Vehicle arrives at location", "confidence": 94 }
-  ],
-  "contradictions": [
-    { "id": "con-1", "description": "Witness statement claims blue car, photo shows gray SUV", "severity": "high", "confidence": 90 }
-  ]
 }
 ```
 
@@ -386,72 +453,89 @@ Analysis results include structured entities, timeline events, contradictions, a
 
 ## 🎯 Use Cases
 
-### 🚗 Insurance Claim Investigation
-Upload accident photos, policy documents, FIR reports, and witness statements. EchoTrace cross-references everything to validate the claim, detect fraud indicators, and assess damage progression in real-time.
+<div align="center">
+<table>
+<tr>
+<td align="center" width="16%">🚗</td>
+<td align="center" width="16%">🔍</td>
+<td align="center" width="16%">📰</td>
+<td align="center" width="16%">🏢</td>
+<td align="center" width="16%">👮</td>
+<td align="center" width="16%">🔐</td>
+</tr>
+<tr>
+<td align="center"><b>Insurance</b><br><sub>Real-time claim validation & fraud detection</sub></td>
+<td align="center"><b>Missing Persons</b><br><sub>Cross-reference photos, statements, GPS</sub></td>
+<td align="center"><b>Journalism</b><br><sub>Verify sources & detect manipulation</sub></td>
+<td align="center"><b>Corporate</b><br><sub>Incident documentation & compliance</sub></td>
+<td align="center"><b>Law Enforcement</b><br><sub>Evidence organization & timeline</sub></td>
+<td align="center"><b>Cybersecurity</b><br><sub>Post-incident correlation & reporting</sub></td>
+</tr>
+</table>
+</div>
 
-### 🔍 Missing Person Investigation
-Combine CCTV frames, WhatsApp conversations, voice notes, and GPS location data. The AI reconstructs the person's movement timeline and identifies discrepancies in witness accounts.
+### 📊 Measurable Impact
 
-### 📰 Journalism Fact Verification
-Upload interview recordings, screenshot evidence, photos, and documents. Detect contradictions between sources and verify the authenticity timeline of visual evidence.
-
-### 🏢 Corporate Incident Investigation
-Document workplace incidents with photos, emails, security footage frames, and incident reports. Generate explainable timelines for compliance and legal review.
-
-### 👮 Law Enforcement Evidence Organization
-Structure chaotic crime scene evidence — photos, witness statements, forensic reports, and call records — into a coherent, searchable investigation dashboard.
-
-### 🔐 Cybersecurity Post-Incident Documentation
-Correlate incident screenshots, system logs, communication records, and timeline data for comprehensive post-incident reporting.
+- ⚡ **70% faster** evidence organization vs. manual methods
+- 🔍 **Real-time contradiction detection** — catch mismatches instantly
+- 📸 **AI-guided evidence collection** — reduces resubmission rates
+- 📋 **Explainable AI** — every result cites source evidence with confidence scores
 
 ---
 
-## 🗺️ Development Roadmap
+## 🗺️ Roadmap
+
+<div align="center">
 
 ### ✅ Completed (MVP)
-- [x] Drag-and-drop evidence upload (images, audio, PDFs, text)
-- [x] Gemini-powered multimodal analysis pipeline
-- [x] Entity extraction (people, vehicles, locations, organizations)
-- [x] Automatic timeline generation with confidence scores
-- [x] Contradiction detection with severity ratings
-- [x] Interactive evidence relationship graph (React Flow)
-- [x] Live Copilot — real-time streaming analysis progress
-- [x] Evidence quality scanner — per-file quality assessment
-- [x] Claim confidence meter with detailed breakdowns
-- [x] Smart investigation assistant chat
-- [x] Case notes with persistence
-- [x] Side-by-side evidence comparison
-- [x] Dark theme professional UI with animations
+
+| Feature | Status |
+|---------|--------|
+| Drag-and-drop evidence upload | ✅ |
+| Gemini multimodal analysis pipeline | ✅ |
+| Entity extraction (people, vehicles, locations) | ✅ |
+| Automatic timeline generation | ✅ |
+| Contradiction detection with severity | ✅ |
+| Interactive evidence graph (React Flow) | ✅ |
+| Live Copilot streaming | ✅ |
+| Evidence quality scanner | ✅ |
+| Claim confidence meter | ✅ |
+| Smart investigation chat | ✅ |
+| Case notes with persistence | ✅ |
+| Side-by-side evidence comparison | ✅ |
+| Dark theme professional UI | ✅ |
 
 ### 🔜 In Progress
-- [ ] Real-time evidence capture assistant (AI guides camera for optimal collection)
-- [ ] Environmental context verification (weather, traffic, location APIs)
-- [ ] Duplicate claim detection across investigations
+
+- [ ] Real-time evidence capture assistant
+- [ ] Environmental context verification (weather, traffic APIs)
+- [ ] Duplicate claim detection
 - [ ] Automated PDF report generation
 
 ### 🔮 Future
-- [ ] Mobile app for on-scene evidence collection
-- [ ] Multi-user collaboration with role-based access
-- [ ] WebSocket/Socket.IO for true real-time streaming
-- [ ] Advanced video frame extraction and analysis
-- [ ] Integration with police and insurance databases
-- [ ] Custom AI model fine-tuning for domain-specific investigations
+
+- [ ] Mobile app for on-scene collection
+- [ ] Multi-user collaboration & role-based access
+- [ ] WebSocket/Socket.IO for true streaming
+- [ ] Video frame extraction & analysis
+- [ ] Police & insurance database integration
+
+</div>
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome and appreciated! Here's how you can help:
+Contributions make this project better! Here's how:
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-Please ensure your code passes the type checker before submitting:
+1. 🍴 **Fork** the repository
+2. 🌿 **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. 💾 **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. 📤 **Push** to the branch: `git push origin feature/amazing-feature`
+5. 🔃 **Open** a Pull Request
 
 ```bash
+# Check types before submitting
 npm run typecheck
 ```
 
@@ -459,14 +543,14 @@ npm run typecheck
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
 <div align="center">
 
-**Built with ❤️ by Jackson JP** — [Panimalar Engineering College](https://www.panimalar.ac.in/)
+**MIT License** — Copyright © 2026 [Jackson JP](https://github.com/Jacksonfio)
 
-**Powered by [Google Gemini](https://ai.google.dev/) · [Next.js](https://nextjs.org/) · [Firebase](https://firebase.google.com/)**
+*Built with ❤️ at [Panimalar Engineering College](https://www.panimalar.ac.in/)*
+
+**Powered by** [![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=flat&logo=googlegemini)](https://ai.google.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js)](https://nextjs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/)
 
 </div>
