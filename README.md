@@ -17,10 +17,9 @@
 
 <br>
 
-<!-- Demo GIF placeholder - replace with actual screen recording -->
-<a href="#">
-  <img src="https://img.shields.io/badge/📸-Add_Screenshot_Here-0A0A1A?style=for-the-badge&logo=react&logoColor=06B6D4&labelColor=12122A" alt="EchoTrace AI Demo" width="80%" style="border-radius: 12px;">
-</a>
+<!-- 🖼️ Add a screenshot of the EchoTrace dashboard here once you have one. Example: ![EchoTrace AI Dashboard](./docs/screenshot-dashboard.png) -->
+
+> 🖼️ *Screenshot coming soon — run the project locally or visit the live demo to see EchoTrace AI in action.*
 
 <br>
 <br>
@@ -36,7 +35,7 @@
 ## 📋 Table of Contents
 
 
-[✨ Key Features](#-key-features) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [🛠️ Tech Stack](#%EF%B8%8F-tech-stack) · [🚀 Quick Start](#-quick-start) · [📁 Structure](#-project-structure) · [📡 API](#-api-reference) · [🎯 Use Cases](#-use-cases) · [🗺️ Roadmap](#%EF%B8%8F-roadmap) · [🤝 Contribute](#-contributing)
+[Key Features](#key-features) · [Architecture](#architecture) · [Tech Stack](#tech-stack) · [Quick Start](#quick-start) · [Structure](#project-structure) · [API](#api-reference) · [Use Cases](#use-cases) · [Roadmap](#roadmap) · [Contribute](#contributing)
 
 
 
@@ -181,11 +180,8 @@ graph TB
     B1 -->|"Upload"| S2
     B1 -.->|"Future"| S3
 
-    %% ── APPLY LAYER STYLES ──
-    class FRONTEND frontend
-    class BACKEND backend
-    class AI_ENGINE ai
-    class STORAGE storage
+    %% Note: Layer subgraph styling is handled via node classDefs above.
+    %% GitHub's Mermaid renderer does not apply classDef fill/stroke to subgraph containers.
 ```
 
 ### 🔄 Data Flow
